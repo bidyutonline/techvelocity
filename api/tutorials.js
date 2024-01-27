@@ -23,13 +23,19 @@ const articles = [
 ]
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  - /api/tutorials - lists all tutorials e.g. python, statistics etc
+// Endpoint: /api/tutorials
+// Returns: list of all tutorials
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('', (req, res) => {
     res.send(JSON.stringify(tutorials))
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// - /api/tutorials/:tutorialBreadCrumb - lists all topics under tutorials e.g. Python Basic, NumPy Basic tec
+// Endpoint: /api/tutorials/:tutorialBreadCrumb
+// Returns: tutorial object having breadcrumb =  tutorialBreadCrumb
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('/:tutorialBreadCrumb', (req, res) => {
 
     // find the tutorial Id
@@ -44,7 +50,10 @@ router.get('/:tutorialBreadCrumb', (req, res) => {
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// - /api/tutorials/:tutorialId/topics - lists all topics under tutorial id
+// Endpoint: /api/tutorials/:tutorialId/topics
+// Returns: All topics under tutorial with breadcrumb = tutorialId
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('/:tutorialBreadcrumb/topics', (req, res) => {
     const tutorialBreadcrumb = req.params.tutorialBreadcrumb
     const tutorial = tutorials.find( item => item.breadcrumb == tutorialBreadcrumb)    
@@ -58,7 +67,10 @@ router.get('/:tutorialBreadcrumb/topics', (req, res) => {
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// - /api/tutorials/:tutorialId/topics/:topicId - lists all articles under topics
+// Endpoint: /api/tutorials/:tutorialId/topics/:topicBreadcrumb
+// Returns: topic object with breadcrumb = topicBreadcrumb
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb', (req, res) => {
     const topicBreadcrumb = req.params.topicBreadcrumb
     const topic = topics.find( item => item.breadcrumb == topicBreadcrumb)    
@@ -71,7 +83,10 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb', (req, res) => {
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// - /api/tutorials/:tutorialId/topics/:topicId/articles - lists all articles under topics
+// Endpoint: /api/tutorials/:tutorialId/topics/:topicBreadcrumb/articles
+// Returns:  All articles under topics with breadcrumb = topicBreadcrumb
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles', (req, res) => {
     const topicBreadcrumb = req.params.topicBreadcrumb
     const topic = topics.find( item => item.breadcrumb == topicBreadcrumb)    
@@ -85,7 +100,10 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles', (req, res) =
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// - /api/tutorials/:tutorialId/topics/:topicId/articles/articleBreadcrumb - lists all articles under topics
+// Endpoint: /api/tutorials/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadcrumb
+// Returns:  article object having breadcrumb = articleBreadcrumb
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadcrumb', (req, res) => {
     const articleBreadcrumb = req.params.articleBreadcrumb
     const article = articles.find( item => item.breadcrumb == articleBreadcrumb)    
@@ -97,4 +115,9 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadc
     }
 })
 
+
+
+/* Add routes before this line */
+
+///////////////////////////////////////////////// End of Routes ////////////////////////////////////////////
 module.exports = router;
