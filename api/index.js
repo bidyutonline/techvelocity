@@ -1,9 +1,11 @@
 const express = require('express')
+var cors = require('cors')
 const app = express()
 
 const tutorialsRoutes = require('./tutorials')
 
 app.use(express.json())
+app.use(cors())
 
 app.use('/api/tutorials', tutorialsRoutes)
 
