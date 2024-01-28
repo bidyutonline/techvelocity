@@ -18,7 +18,7 @@ const TopNav = (props: any) => {
     }
 
     return (
-        <nav className="bg-blue-500 text-white shadow border-b mb-1 px-2">
+        <nav className="bg-white shadow border-b mb-1 px-2 py-2">
             <div className="flex justify-between">
                 
                 <div className="flex justify-between">
