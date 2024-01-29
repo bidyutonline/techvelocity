@@ -8,6 +8,8 @@ import Topics from './components/tutorials/topics';
 import Article from './components/tutorials/article';
 import AdminDashboard from './components/admin/admindashboard';
 import AddTutorial from './components/admin/addtutorial';
+import AddTopic from './components/admin/addtopic';
+import AddArticle from './components/admin/addarticle';
 
 function App() {
   const [selectedTutorial, setSelectedTutorial] = useState()
@@ -37,6 +39,8 @@ function App() {
           {/* Admin Section */}
           <Route path='cpanel/' element={<AdminDashboard />} >
             <Route path='add-tutorial' element={<AddTutorial />}></Route>
+            <Route path='add-topic' element={<AddTopic />}></Route>
+            <Route path='add-article' element={<AddArticle />}></Route>
           </Route>
         </Routes>
 
