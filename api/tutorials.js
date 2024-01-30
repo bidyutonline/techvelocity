@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Joi = require('joi')
+const database = require('./database')
 
 const tutorials = [
     {id:1, name:"Python", description: "Python is great", breadcrumb: 'python'},
@@ -22,13 +23,24 @@ const articles = [
     {id:1, title: "Python tuple", body:'Python tuple body', breadcrumb:'python-tuple', topicId:1},
 ]
 
+/*
+ - Tutorial (e.g. Python) => Menu
+    --> Topic (e.g. NumPy Basic) => Submenu
+        --> Article (e.g. NumPy Array) => Content
+*/
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Endpoint: /api/tutorials
 // Returns: list of all tutorials
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 router.get('', (req, res) => {
-    res.send(JSON.stringify(tutorials))
+    //res.send(JSON.stringify(tutorials))
+    database.getTutorials( record => {
+        res.send(record)
+    })
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +127,13 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadc
     }
 })
 
+router.post('/add', (req, res) => {
+    console.log(req.body.params)
+    database.addTutorial(req.body.params, (document) => {
+        console.log(document)
+        res.send(document)
+    })
+})
 
 
 /* Add routes before this line */
