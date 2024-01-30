@@ -26,7 +26,7 @@ const Topics = (props : any) => {
                     <hr />
                     <div className="p-2">
                         <p>{item["description"]} 
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                        {/* Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, */}
                         </p>
                     </div>
                     <Link onClick={onStart} to={'/tutorials/' + breadcrumb + '/' +item["breadcrumb"] } className="bg-blue-600 hover:bg-blue-700 text-white rounded px-3 py-1">Start</Link>
