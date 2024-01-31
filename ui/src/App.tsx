@@ -12,8 +12,8 @@ import AddTopic from './components/admin/addtopic';
 import AddArticle from './components/admin/addarticle';
 
 function App() {
-  const [selectedTutorial, setSelectedTutorial] = useState()
-  const [selectedTopic, setSelectedTopic] = useState()
+  const [selectedTutorial, setSelectedTutorial] = useState("")
+  const [selectedTopic, setSelectedTopic] = useState("")
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {

@@ -6,6 +6,7 @@ const Topics = (props : any) => {
     const [topics, setTopics] = useState([])
     const params = useParams()
     const breadcrumb = params.tutorialBreadcrumb!
+    console.log(breadcrumb)
     
     const onStart = (e: any) => {
         props.setSelectedTopic(e.target.href.split("/").pop())

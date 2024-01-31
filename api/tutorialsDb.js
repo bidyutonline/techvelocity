@@ -87,6 +87,16 @@ async function addArticle(articleArgs, callback) {
         .catch(error => callback({error: "error occurred" }))
 }
 
+async function getArticlesByTopic(topicBreadcrumb) {
+    const articles = await Articles.find({topic: topicBreadcrumb})
+    return articles
+}
+
+async function getArticleByBreadcrumb(breadcrumb) {
+    const article = await Articles.find({breadcrumb: breadcrumb})
+    console.log(article)
+    return article
+}
 
 module.exports.addTutorial = addTutorial
 module.exports.getTutorials = getTutorials
@@ -97,3 +107,5 @@ module.exports.getTopics = getTopics
 module.exports.getTopicByBreadcrumb = getTopicByBreadcrumb
 
 module.exports.addArticle = addArticle
+module.exports.getArticlesByTopic = getArticlesByTopic
+module.exports.getArticleByBreadcrumb = getArticleByBreadcrumb

@@ -101,16 +101,12 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb', async (req, res) => {
 // Returns:  All articles under topics with breadcrumb = topicBreadcrumb
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles', (req, res) => {
+router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles', async (req, res) => {
     const topicBreadcrumb = req.params.topicBreadcrumb
-    const topic = topics.find(item => item.breadcrumb == topicBreadcrumb)
-    if (topic) {
-        articleFiltered = articles.filter(item => item.topicId == topic.id)
-        res.send(JSON.stringify(articleFiltered))
-    }
-    else {
-        res.status(401).send(`Topic with url ${topicBreadcrumb} does not exist`)
-    }
+    //console.log(topicBreadcrumb)
+    const articleFiltered = await database.getArticlesByTopic(topicBreadcrumb)
+    //console.log(articleFiltered)
+    res.send(JSON.stringify(articleFiltered))
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,9 +114,10 @@ router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles', (req, res) =
 // Returns:  article object having breadcrumb = articleBreadcrumb
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadcrumb', (req, res) => {
+router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb/articles/:articleBreadcrumb', async (req, res) => {
     const articleBreadcrumb = req.params.articleBreadcrumb
-    const article = articles.find(item => item.breadcrumb == articleBreadcrumb)
+    console.log(articleBreadcrumb)
+    const article = await database.getArticleByBreadcrumb(articleBreadcrumb)
     if (article) {
         res.send(JSON.stringify(article))
     }
