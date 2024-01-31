@@ -17,11 +17,11 @@ const database = require('./tutorialsDb')
 //     {id:5, name:"MySQL Basics", breadcrumb: 'mysql-basics', tutorialId:2},
 // ]
 
-const articles = [
-    { id: 1, title: "Python Data Types", body: 'Python Data Types bosy', breadcrumb: 'python-data-types', topicId: 1 },
-    { id: 1, title: "Python List", body: 'Pytho list body', breadcrumb: 'python-list', topicId: 1 },
-    { id: 1, title: "Python tuple", body: 'Python tuple body', breadcrumb: 'python-tuple', topicId: 1 },
-]
+// const articles = [
+//     { id: 1, title: "Python Data Types", body: 'Python Data Types bosy', breadcrumb: 'python-data-types', topicId: 1 },
+//     { id: 1, title: "Python List", body: 'Pytho list body', breadcrumb: 'python-list', topicId: 1 },
+//     { id: 1, title: "Python tuple", body: 'Python tuple body', breadcrumb: 'python-tuple', topicId: 1 },
+// ]
 
 /*
  - Tutorial (e.g. Python) => Menu
@@ -35,11 +35,9 @@ const articles = [
 // Returns: list of all tutorials
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('', (req, res) => {
-    //res.send(JSON.stringify(tutorials))
-    database.getTutorials(tutorials => {
-        res.send(tutorials)
-    })
+router.get('', async (req, res) => {
+    const tutorials = await database.getTutorials()
+    res.send(tutorials)
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,21 +45,19 @@ router.get('', (req, res) => {
 // Returns: tutorial object having breadcrumb =  tutorialBreadCrumb
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('/:tutorialBreadCrumb', (req, res) => {
+router.get('/:tutorialBreadCrumb', async (req, res) => {
 
     console.log("Call in /:tutorialBreadCrumb")
     // find the tutorial Id
     const tutorialBreadcrumb = req.params.tutorialBreadcrumb
+    const tutorial = await database.getTutorialbyBreadcrumb(tutorialBreadcrumb)
+    if (tutorial) {
+        res.send(tutorial)
+    }
+    else {
+        res.status(401).send(`Tutorial with id ${tutorialId} does not exist`)
+    }
 
-    database.getTutorials(tutorials => {
-        const tutorial = tutorials.find(item => item.Breadcrumb == tutorialBreadcrumb)
-        if (tutorial) {
-            res.send(tutorial)
-        }
-        else {
-            res.status(401).send(`Tutorial with id ${tutorialId} does not exist`)
-        }
-    })
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,22 +65,19 @@ router.get('/:tutorialBreadCrumb', (req, res) => {
 // Returns: All topics under tutorial with breadcrumb = tutorialId
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('/:tutorialBreadcrumb/topics', (req, res) => {
+router.get('/:tutorialBreadcrumb/topics', async (req, res) => {
 
     console.log("Call in /:tutorialBreadcrumb/topics")
 
     const tutorialBreadcrumb = req.params.tutorialBreadcrumb
-    database.getTopics(topics => {
-        console.log(topics)
-        if (topics) {
-            topicsFiltered = topics.filter(item => item.tutorial == tutorialBreadcrumb)
-            res.send(JSON.stringify(topicsFiltered))
-        }
-        else {
-            res.status(401).send(`Tutorial with url ${tutorialBreadcrumb} does not exist`)
-        }
-    })
-
+    const topics = await database.getTopics()
+    if (topics) {
+        topicsFiltered = topics.filter(item => item.tutorial == tutorialBreadcrumb)
+        res.send(JSON.stringify(topicsFiltered))
+    }
+    else {
+        res.status(401).send(`Tutorial with url ${tutorialBreadcrumb} does not exist`)
+    }
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,17 +85,15 @@ router.get('/:tutorialBreadcrumb/topics', (req, res) => {
 // Returns: topic object with breadcrumb = topicBreadcrumb
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb', (req, res) => {
+router.get('/:tutorialBreadcrumb/topics/:topicBreadcrumb', async (req, res) => {
     const topicBreadcrumb = req.params.topicBreadcrumb
-    database.getTopics(topics => {
-        const topic = topics.find(item => item.breadcrumb == topicBreadcrumb)
-        if (topic) {
-            res.send(JSON.stringify(topic))
-        }
-        else {
-            res.status(401).send(`Topic with url ${topicBreadcrumb} does not exist`)
-        }
-    })
+    const topic = await database.getTopicByBreadcrumb(topicBreadcrumb)
+    if (topic) {
+        res.send(JSON.stringify(topic))
+    }
+    else {
+        res.status(401).send(`Topic with url ${topicBreadcrumb} does not exist`)
+    }    
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,6 +147,14 @@ router.post('/topics/add', (req, res) => {
     })
 })
 
+
+router.post('/topics/articles/add', (req, res) => {
+    console.log(req.body.params)
+    database.addArticle(req.body.params, (document) => {
+        //console.log(document)
+        res.send(document)
+    })
+})
 
 /* Add routes before this line */
 

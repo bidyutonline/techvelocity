@@ -6,14 +6,33 @@ import axios from 'axios';
 const AddArticle = () => {
     const editorRef = useRef<TinyMCEEditor | null>(null)
 
+    const [title, setTitle] = useState("")
     const [tutorials, setTutorials] = useState([])
     const [selectedTutorial, setSelectedTutorial] = useState()
     const [topics, setTopics] = useState([])
     const [selectedTopic, setSelectedTopic] = useState()
+    const [keywords, setKeywords] = useState("")
 
     const onSave = (e: any) => {
 
     }
+    const onPublish = (e: any) => {
+
+        const url = process.env.REACT_APP_API_URL + "/api/tutorials/topics/articles/add"
+        const params = {
+            title: title,
+            content: editorRef.current?.getContent(),
+            breadcrumb: title.toLowerCase().replace(" ", "-"),
+            keywords: keywords,
+            tutorial: selectedTutorial,
+            topic: selectedTopic
+        }
+        axios.post(url, {params}).then((res: any) => {
+            console.log(res)
+        })
+
+        //console.log(params)
+    }    
 
     const onCancel = (e: any) => {
 
@@ -46,11 +65,11 @@ const AddArticle = () => {
                 <div className="text-center mt-4 text-xl font-semibold">Add Article</div>
                 <div className="flex justify-center mt-5">
                     <h1 className="inline-block font-semibold pr-5">Title</h1>
-                    <input type="text" className="border w-11/12 rounded"></input>
+                    <input value={title} onChange={e => setTitle(e.target.value)} type="text" className="border w-11/12 rounded"></input>
                 </div>
                 <div className='w-full mt-10 flex justify-center'>
                     <Editor
-                        //apiKey='your-api-key'
+                        apiKey='lqyih5twi1y6vd9sowaies7nviwkt5kxm0h3n7gj0oe921t9'
                         onInit={(evt, editor) => editorRef.current = editor}
                         initialValue="<p>This is the initial content of the editor.</p>"
                         init={{
@@ -140,12 +159,13 @@ const AddArticle = () => {
 
                 <div className=' bg-white my-3 p-4'>
                     <h2>Keywords</h2>
-                    <input type="text" className='border rounded w-56 mt-1'/>
+                    <input value={keywords} onChange={ e => setKeywords(e.target.value)} type="text" className='border rounded w-56 mt-1'/>
                 </div>
 
                 <div className='bg-white p-4 flex justify-end'>
-                    <button onClick={onSave} className='px-5 py-1 bg-blue-700 hover:bg-blue-800 rounded text-white'> Save</button>
-                    <button onClick={onCancel} className='ml-2 px-5 py-1 bg-blue-700 hover:bg-blue-800 rounded text-white'> Cancel</button>
+                    <button onClick={onPublish} className='ml-2 px-4 py-1 bg-blue-700 hover:bg-blue-800 rounded text-white'> Publish</button>
+                    <button onClick={onSave} className='ml-1 px-4 py-1 bg-blue-700 hover:bg-blue-800 rounded text-white'> Save</button>
+                    <button onClick={onCancel} className='ml-1 px-4 py-1 bg-blue-700 hover:bg-blue-800 rounded text-white'> Cancel</button>
                 </div>
 
             </div>

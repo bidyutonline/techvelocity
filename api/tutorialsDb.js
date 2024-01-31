@@ -24,19 +24,14 @@ function addTutorial(tutorialArgs, callback) {
         .catch(error => callback({error: "error occurred" }))
 }
 
-function getTutorials(callBack) {
-    
-    Tutorials.find({}).then( record => {
-        //console.log(record)
-        callBack(record)
-    })
+async function getTutorials() {
+    records = await Tutorials.find({})
+    return records
 }
 
-function getTutorialbyBreadcrumb(breadcrumb, callBack) {
-    Tutorials.find({breadcrumb : breadcrumb}).then( record => {
-        //console.log(record)
-        callBack(record)
-    })    
+async function getTutorialbyBreadcrumb(breadcrumb) {
+    const record = await Tutorials.find({breadcrumb : breadcrumb})
+    return record
 }
 
 // ============================ Topic ============================
@@ -58,16 +53,47 @@ function addTopic(topicArgs, callback) {
         .catch(error => callback({error: "error occurred" }))
 }
 
-function getTopics(callBack) {
-    
-    Topics.find({}).then( record => {
-        //console.log(record)
-        callBack(record)
-    })
+
+async function getTopics() {
+    const topics = await Topics.find({})
+    return topics
 }
+
+async function getTopicByBreadcrumb(breadcrumb) {
+    const topics = await Topics.find({breadcrumb: breadcrumb})
+    return topics
+}
+
+//======================= Article =======================================
+
+const ArticleSchema = mongoose.Schema({
+    title: String,
+    content: String,
+    breadcrumb: {type: String, unique: true},
+    keywords: String,
+    isPublished: {type: Boolean, default: true},
+    author: {type: String, default: "Techvelocity"},
+    dateCreated: {type: Date, default: Date.now},
+    tutorial: String,
+    topic: String,
+})
+
+const Articles = mongoose.model('Articles', ArticleSchema)
+
+async function addArticle(articleArgs, callback) {
+    const article = new Articles(articleArgs)
+    article.save()
+        .then( res => callback(res) )
+        .catch(error => callback({error: "error occurred" }))
+}
+
 
 module.exports.addTutorial = addTutorial
 module.exports.getTutorials = getTutorials
 module.exports.getTutorialbyBreadcrumb = getTutorialbyBreadcrumb
+
 module.exports.addTopic = addTopic
 module.exports.getTopics = getTopics
+module.exports.getTopicByBreadcrumb = getTopicByBreadcrumb
+
+module.exports.addArticle = addArticle
